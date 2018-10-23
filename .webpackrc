@@ -1,0 +1,18 @@
+{
+  "extraBabelPlugins": [
+      ["import", { "libraryName": "antd", "style": "css" }]
+  ],
+  "proxy": { 
+    "/api": { 
+      "target": "http://localhost:3000", 
+      "changeOrigin": true, 
+      "pathRewrite": { "^/api": "/api" },
+      "secure": false
+    } 
+  },
+  "env": {
+    "development": {
+      "extraBabelPlugins": ["dva-hmr"]
+    }
+  }
+}
