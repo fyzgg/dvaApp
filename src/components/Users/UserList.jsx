@@ -1,20 +1,34 @@
 /*  采用antd的UI组件*/
 import React,{ Component } from 'react';
-import {Table,Popconfirm} from 'antd';
+import { Table, Popconfirm, Button } from 'antd';
 import { connect } from 'dva';
 import 'antd/dist/antd.css';
+import UserModal from './UserModal';
+
 /*  采用stateless的写法*/
 class UserList extends Component{
-  pageChangeHandle = page => {
+  pageChangeHandler = page => {
     this.props.dispatch({
       type:'users/fetch',
-      payload:{page:page}
+      payload:{ page }
     })
   }
-  deleteHandle = ({userId}) => {
+  deleteHandler = ({userId}) => {
     this.props.dispatch({
       type:'users/delete',
-      payload:{userId}
+      payload:{ userId }
+    })
+  }
+  createHandler = ({ values }) =>{
+    this.props.dispatch({
+      type:'users/create',
+      payload:{ values }
+    })
+  }
+  editHandler = ({ values, id }) => {
+    this.props.dispatch({
+      type:'users/edit',
+      payload:{ values, id }
     })
   }
   /**
@@ -31,7 +45,7 @@ class UserList extends Component{
       title:'姓名',
       dataIndex:'name',
       key:'name',
-      render:(text)=><a href="#">{text}</a>,
+      render:(text) => <a href="javascript:void(0);">{text}</a>,
     },{
       title:'年龄',
       dataIndex:'age',
@@ -43,12 +57,14 @@ class UserList extends Component{
     },{
       title: '操作',
       key: 'operation',
-      render:(text,record)=>(
+      render:(text,record) => (
         <p>
-          <a href="javascript:;" onClick={()=>{}}>编辑</a>
+          <UserModal record={ record } onOk={this.editHandler}>
+            <a href="javascript:void(0);">编辑</a>
+          </UserModal>
           <Popconfirm title="确定要删除吗?" 
-            onConfirm={this.deleteHandle.bind(null,{userId:record.id})}>
-            <a href="javascript:;">删除</a>
+            onConfirm={this.deleteHandler.bind(null,{userId:record.id})}>
+            <a href="javascript:void(0);">删除</a>
           </Popconfirm>
         </p>
       ),
@@ -59,10 +75,13 @@ class UserList extends Component{
       total,
       current,
       pageSize: 10,
-      onChange: this.pageChangeHandle,
+      onChange: this.pageChangeHandler,
     };
     return (
       <div>
+        <UserModal record={{}} onOk={this.createHandler}>
+          <Button type="primary">增加 </Button>
+        </UserModal>
         <Table
         columns={columns}
         dataSource={dataSource}

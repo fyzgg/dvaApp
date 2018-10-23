@@ -57,22 +57,47 @@ export default {
         })
       }
     },
-    *create(){},
-    *delete({ payload:{userId} },{call,put}){
-      const { data } = yield call(usersService.remove, {userId});
+    *create({ payload:{ values } },{call,put}){
+      var { data } = yield call(usersService.create,{ values });
       if (data) {
         if (data.success) {
-          yield message.success(data.message);
+          message.success(data.message);
           yield put({
             type:'reload',
           })
         }else {
-          yield message.error(data.message);
+          message.error(data.message);
+        }
+      }
+    },
+    *delete({ payload:{userId} },{call,put}){
+      const { data } = yield call(usersService.remove, {userId});
+      if (data) {
+        if (data.success) {
+          message.success(data.message);
+          yield put({
+            type:'reload',
+          })
+        }else {
+          message.error(data.message);
         }
         
       }
     },
-    *update(){},
+    *update({payload:{ values, id }},{call,put}){
+      const { data } = yield call(usersService.modify,{ values, id });
+      if (data) {
+        if (data.success) {
+          message.success(data.message);
+          yield put({
+            type:'reload',
+          })
+        }else {
+          message.error(data.message);
+        }
+        
+      }
+    },
     *reload(action,{select,put}){
       const page = yield select(state => state.users.page);
       yield put({

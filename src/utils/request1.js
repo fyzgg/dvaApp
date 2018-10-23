@@ -1,8 +1,8 @@
-import { ajax } from 'jquery';
+import fetch from 'dva/fetch';
 
-function parseJSON(response) {
+/*function parseJSON(response) {
   return response.json();
-}
+}*/
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
@@ -20,22 +20,19 @@ function checkStatus(response) {
  * @param  {object} [options] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export default function request(url, options={body:'{}',methods:'get'}) {
+async function request (url,options){
   console.log(options)
-  const data = {};
-  ajax({
-    url: url,
-    async:false,
-    type: options.methods,
-    data: options.body,
-  })
-  .done(function(response){
-    data.data = response;
-  })
-  .fail(function(response) {
-    checkStatus(response);
-    console.log("error");
-  }) 
-  console.log(data)
-  return data;
+  const response = await fetch(url,options);
+  checkStatus(response);
+  const data = await response.json();
+  const ret = {
+    data,
+    headers:{}
+  };
+  if(response.headers.get('x-total-count')){
+    ret.headers['x-total-count'] = response.headers.get('x-total-count');
+  }
+  return ret;
 }
+
+export default request;
