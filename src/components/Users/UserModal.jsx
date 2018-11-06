@@ -18,11 +18,9 @@ class UserModal extends Component{
   }
 
   okHandler = e =>{
-    if(e) e.preventDefault();
+    if(e) e.stopPropagation();
     const { onOk, record:{ id } } = this.props;
-    console.log(this.props)
     this.props.form.validateFieldsAndScroll((err, values) =>{
-      console.log(values)
       if (!err) {
         onOk({ values,id });
         this.hideModalHandler();
@@ -65,7 +63,7 @@ class UserModal extends Component{
                 rules:[
                   {
                     type:'regexp',
-                    pattern: new RegExp(/^(\d)(\d?)$/),
+                    pattern: new RegExp(/^(\d)(\d?)$/,'i'),
                     required:true,
                     max:2,
                     message: '请填写正确的年龄！'

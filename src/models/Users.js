@@ -46,6 +46,7 @@ export default {
     *fetch({ payload:{page} },{ call,put }){
       yield put({ type:'showLoading' });
       const { data } = yield call(usersService.fetch,{page});
+      
       if(data){
         yield put({
           type:'querySuccess',
@@ -81,7 +82,6 @@ export default {
         }else {
           message.error(data.message);
         }
-        
       }
     },
     *update({payload:{ values, id }},{call,put}){

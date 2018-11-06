@@ -1,9 +1,5 @@
 import { ajax } from 'jquery';
 
-function parseJSON(response) {
-  return response.json();
-}
-
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -27,7 +23,7 @@ export default function request(url, options={body:'{}',methods:'get'}) {
     url: url,
     async:false,
     type: options.methods,
-    data: options.body,
+    data: JSON.parse(options.body),
   })
   .done(function(response){
     data.data = response;
@@ -36,6 +32,5 @@ export default function request(url, options={body:'{}',methods:'get'}) {
     checkStatus(response);
     console.log("error");
   }) 
-  console.log(data)
   return data;
 }

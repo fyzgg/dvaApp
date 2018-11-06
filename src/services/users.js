@@ -16,9 +16,9 @@ export function create({ values }){
 }
 
 export function modify({ values, id }){
-  var data = Object.assign(values,id);
+  var data = Object.assign(values,{id});
   return request(`/api/users/modify`,{
-    methods:'POST',
+    methods:'get',
     headers: {
       'Content-Type': 'application/json'
     },

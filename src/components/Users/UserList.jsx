@@ -25,9 +25,9 @@ class UserList extends Component{
       payload:{ values }
     })
   }
-  editHandler = ({ values, id }) => {
+  modifyHandler = ({ values, id }) => {
     this.props.dispatch({
-      type:'users/edit',
+      type:'users/update',
       payload:{ values, id }
     })
   }
@@ -59,7 +59,7 @@ class UserList extends Component{
       key: 'operation',
       render:(text,record) => (
         <p>
-          <UserModal record={ record } onOk={this.editHandler}>
+          <UserModal record={ record } onOk={this.modifyHandler}>
             <a href="javascript:void(0);">编辑</a>
           </UserModal>
           <Popconfirm title="确定要删除吗?" 
